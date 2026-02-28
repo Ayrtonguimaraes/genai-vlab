@@ -1,6 +1,8 @@
 from google import genai
 from dotenv import load_dotenv
-from aluno import Aluno
+from src.aluno import Aluno
+import json
+import time
 
 load_dotenv()
 
@@ -18,7 +20,16 @@ Crie uma explicação simples e direta para {aluno1.nome}.
 # The client gets the API key from the environment variable `GEMINI_API_KEY`.
 client = genai.Client()
 
+modelo = "gemini-3-flash-preview"
 response = client.models.generate_content(
-    model="gemini-3-flash-preview", contents=prompt_simples
+    model=modelo, contents=prompt_simples
 )
-print(response.text)
+
+dado = {
+    'modelo': modelo,
+    'resposta': response.text,
+    'timestamp': time.time()
+}
+
+with open ('resposta_da_api.json', 'w', encoding='utf-8') as f:
+    json.dump(dado, f, indent=2, ensure_ascii=False)
