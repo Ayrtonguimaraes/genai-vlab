@@ -42,19 +42,21 @@ class GeradorConteudo:
         }
     
     def salvar_resultados(self, resposta_api, topico, persona, persona_prompt):
-        nome_arquivo = f'{self.aluno.nome}_{topico}.json'
+        pasta = f'resultados/{self.aluno.nome}'
+        os.makedirs(pasta, exist_ok=True)
+        caminho_arquivo = f'{pasta}/{topico}.json'
         resposta_api['persona'] = persona
         resposta_api['persona_prompt'] = persona_prompt
         resposta_api['dados_aluno'] = self.aluno.dados_aluno
         resposta_api['topico'] = topico
-        if os.path.exists(nome_arquivo):
-            with open(nome_arquivo, 'r', encoding='utf-8') as f:
+        if os.path.exists(caminho_arquivo):
+            with open(caminho_arquivo, 'r', encoding='utf-8') as f:
                 historico_execucao = json.load(f)
         else:
             historico_execucao = []
 
         historico_execucao.append(resposta_api)
-        with open(nome_arquivo, 'w', encoding='utf-8') as f:
+        with open(caminho_arquivo, 'w', encoding='utf-8') as f:
             json.dump(historico_execucao, f, indent=4, ensure_ascii=False)
 
     def gerar_explicacao(self, topico):
