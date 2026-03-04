@@ -9,10 +9,15 @@ console = Console()
 
 def carregar_alunos(caminho='data/dados_alunos.json'):
     if not os.path.exists(caminho):
-        print("Arquivo de alunos não encontrado. Execute: python criar_alunos.py")
-        exit(1)
-    with open(caminho, 'r', encoding='utf-8') as f:
-        dados = json.load(f)
+        print("Arquivo não encontrado. Execute: python criar_alunos.py")
+        raise SystemExit(1)
+
+    try:
+        with open(caminho, 'r', encoding='utf-8') as f:
+            dados = json.load(f)
+    except json.JSONDecodeError:
+        print("Arquivo de alunos corrompido. Delete data/dados_alunos.json e rode: python criar_alunos.py")
+        raise SystemExit(1)
     # Recria os objetos Aluno a partir do JSON
     return [Aluno(a['nome'], a['idade'], a['nivel_de_conhecimento'], a['estilo_de_aprendizado']) for a in dados]
 
@@ -54,6 +59,9 @@ def main():
         aluno = alunos[int(escolha) - 1]  # -1 porque lista começa em 0
         gerador = GeradorConteudo(aluno)
         topico = input(f"\nDigite o tópico para {aluno.nome}: ").strip()
+        if not topico:
+            print("Tópico não pode ser vazio!")
+            continue
         
         exibir_tipos()
         tipos_escolhidos = input("Escolha: ").strip().split(',')
@@ -67,10 +75,8 @@ def main():
                 console.print(f"\n[bold green]=== {nome} ===[/bold green]")
                 resposta = resultado.get('resposta', resultado.get('erro_mensagem'))
                 if metodo == 'gerar_mapa_mental':
-                    console.print(f"\n[bold green]=== {nome} ===[/bold green]")
                     console.print(resposta)  # sem Markdown()
                 else:
-                    console.print(f"\n[bold green]=== {nome} ===[/bold green]")
                     console.print(Markdown(resposta))
             else:
                 print(f"Tipo '{tipo}' inválido, ignorando.")
