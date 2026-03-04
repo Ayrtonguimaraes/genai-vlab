@@ -1,4 +1,5 @@
 import json
+import os
 from aluno import Aluno
 from gerar_conteudo import GeradorConteudo
 from rich.console import Console
@@ -7,6 +8,9 @@ from rich.markdown import Markdown
 console = Console()
 
 def carregar_alunos(caminho='data/dados_alunos.json'):
+    if not os.path.exists(caminho):
+        print("Arquivo de alunos não encontrado. Execute: python criar_alunos.py")
+        exit(1)
     with open(caminho, 'r', encoding='utf-8') as f:
         dados = json.load(f)
     # Recria os objetos Aluno a partir do JSON

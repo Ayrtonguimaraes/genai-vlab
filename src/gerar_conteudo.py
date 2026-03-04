@@ -120,7 +120,7 @@ Tamanho: Limite os exemplos a no máximo 5 exemplos
 Tom: Deve variar conforme nível do aluno e idade"""
         resultado = self.chamar_api(prompt_completo)
         if not resultado['erro']:
-            self.salvar_resultados(resultado, topico, 'persona_exemplo', self.persona_explicacao)
+            self.salvar_resultados(resultado, topico, 'persona_exemplo', self.persona_exemplo)
         else:
             print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
@@ -147,7 +147,7 @@ Tamanho: Limite as questões a no máximo 5 perguntas
 Tom: Deve variar conforme nível do aluno e idade"""
         resultado = self.chamar_api(prompt_completo)
         if not resultado['erro']:
-            self.salvar_resultados(resultado, topico, 'persona_questoes', self.persona_explicacao)
+            self.salvar_resultados(resultado, topico, 'persona_questoes', self.persona_questoes)
         else:
             print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
@@ -190,7 +190,7 @@ Sistema Principal
 """
         resultado = self.chamar_api(prompt_completo)
         if not resultado['erro']:
-            self.salvar_resultados(resultado, topico, 'persona_mapa_mental', self.persona_explicacao)
+            self.salvar_resultados(resultado, topico, 'persona_mapa_mental', self.persona_mapa_mental)
         else:
             print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
