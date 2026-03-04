@@ -1,0 +1,32 @@
+[
+    {
+        "nome": "João",
+        "idade": 19,
+        "nivel_de_conhecimento": "intermediário",
+        "estilo_de_aprendizado": "leitura-escrita"
+    },
+    {
+        "nome": "Maria",
+        "idade": 50,
+        "nivel_de_conhecimento": "iniciante",
+        "estilo_de_aprendizado": "auditivo"
+    },
+    {
+        "nome": "Pedro",
+        "idade": 13,
+        "nivel_de_conhecimento": "iniciante",
+        "estilo_de_aprendizado": "visual"
+    },
+    {
+        "nome": "Carol",
+        "idade": 28,
+        "nivel_de_conhecimento": "avançado",
+        "estilo_de_aprendizado": "cinestésico"
+    },
+    {
+        "nome": "José",
+        "idade": 60,
+        "nivel_de_conhecimento": "avançado",
+        "estilo_de_aprendizado": "leitura-escrita"
+    }
+]
