@@ -31,15 +31,27 @@ class GeradorConteudo:
 -Estilo de aprendizado: {self.aluno.estilo_aprendizado}"""
 
     def chamar_api(self, prompt):
-        response = self.cliente.models.generate_content(
-            model=self.modelo, contents=prompt
-        )  
-        return {
+        try:
+            response = self.cliente.models.generate_content(
+                model=self.modelo, contents=prompt
+            )
+
+            return {
             'modelo': self.modelo,
             'prompt': prompt,
             'resposta': response.text,
-            'timestamp': time.time()
+            'timestamp': time.time(),
+            'erro': False,
         }
+        except Exception as e:
+            return {
+                'modelo': self.modelo,
+                'prompt': prompt,
+                'timestamp': time.time(),
+                'erro': True,
+                'erro_mensagem': str(e),
+                'erro_tipo': type(e).__name__
+            }
     
     def salvar_resultados(self, resposta_api, topico, persona, persona_prompt):
         pasta = f'resultados/{self.aluno.nome}'
@@ -78,7 +90,11 @@ Estruture sua resposta da seguinte forma:
 Tamanho: Limite a explicação a no máximo 3 parágrafos
 Tom: Deve variar conforme nível do aluno e idade"""
         resultado = self.chamar_api(prompt_completo)
-        self.salvar_resultados(resultado, topico, 'persona_explicacao', self.persona_explicacao)
+
+        if not resultado['erro']:
+            self.salvar_resultados(resultado, topico, 'persona_explicacao', self.persona_explicacao)
+        else:
+            print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
     
     def gerar_exemplos(self, topico):
@@ -103,7 +119,10 @@ Estruture sua resposta da seguinte forma:
 Tamanho: Limite os exemplos a no máximo 5 exemplos
 Tom: Deve variar conforme nível do aluno e idade"""
         resultado = self.chamar_api(prompt_completo)
-        self.salvar_resultados(resultado, topico, 'persona_exemplos', self.persona_exemplo)
+        if not resultado['erro']:
+            self.salvar_resultados(resultado, topico, 'persona_exemplo', self.persona_explicacao)
+        else:
+            print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
     
     def gerar_questoes(self, topico):
@@ -127,7 +146,10 @@ Estruture sua resposta da seguinte forma:
 Tamanho: Limite as questões a no máximo 5 perguntas
 Tom: Deve variar conforme nível do aluno e idade"""
         resultado = self.chamar_api(prompt_completo)
-        self.salvar_resultados(resultado, topico, 'persona_questoes', self.persona_questoes)
+        if not resultado['erro']:
+            self.salvar_resultados(resultado, topico, 'persona_questoes', self.persona_explicacao)
+        else:
+            print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
     
     def gerar_mapa_mental(self, topico):
@@ -167,13 +189,8 @@ Sistema Principal
 3.Uma call to action para engajar o aluno a exercitar os conteúdos revisados
 """
         resultado = self.chamar_api(prompt_completo)
-        self.salvar_resultados(resultado, topico, 'persona_mapa_mental', self.persona_mapa_mental)
+        if not resultado['erro']:
+            self.salvar_resultados(resultado, topico, 'persona_mapa_mental', self.persona_explicacao)
+        else:
+            print(f"Erro ao gerar os dados -> {resultado['erro_mensagem']}")
         return resultado
-
-
-aluno1 = Aluno('joão', 21, 'iniciante', 'Visual')
-topico_aula = "Como fazer um loop 'for' em Python"
-
-gerador = GeradorConteudo(aluno1)
-resultado = gerador.gerar_explicacao(topico_aula)
-print(resultado['resposta'])
